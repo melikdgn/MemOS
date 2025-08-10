@@ -13,12 +13,50 @@ from memos.mem_os.main import MOS
 # Load environment variables from .env file
 load_dotenv()
 
+from memos.configs.llm import LLMConfigFactory
+from memos.configs.mem_os import MOSConfig
+
+# --- LLM Configuration ---
+LLM_BACKEND = os.getenv("LLM_BACKEND", "openai").lower()
+
+def create_mos_config() -> MOSConfig:
+    """Creates the MOSConfig based on environment variables."""
+    if LLM_BACKEND == "ollama":
+        print("Using Ollama backend.")
+        llm_config = LLMConfigFactory(
+            backend="ollama",
+            config={
+                "model_name_or_path": os.getenv("OLLAMA_MODEL", "llama3"),
+                "api_base": os.getenv("OLLAMA_API_BASE", "http://localhost:11434"),
+            },
+        )
+    elif LLM_BACKEND == "openrouter":
+        print("Using OpenRouter backend.")
+        llm_config = LLMConfigFactory(
+            backend="openai",  # OpenRouter uses an OpenAI-compatible API
+            config={
+                "model_name_or_path": os.getenv("OPENROUTER_MODEL", "openai/gpt-3.5-turbo"),
+                "api_key": os.getenv("OPENROUTER_API_KEY"),
+                "api_base": "https://openrouter.ai/api/v1",
+            },
+        )
+    else: # Default to OpenAI
+        print("Using OpenAI backend.")
+        llm_config = LLMConfigFactory(
+            backend="openai",
+            config={
+                "model_name_or_path": "gpt-3.5-turbo",
+                "api_key": os.getenv("OPENAI_API_KEY"),
+            },
+        )
+
+    return MOSConfig(chat_model=llm_config)
+
+
 # Initialize the Memory Operating System
-# MOS.simple() automatically configures MOS from environment variables.
-# Required environment variables:
-# - OPENAI_API_KEY: Your OpenAI API key
-print("Initializing MemOS...")
-mos = MOS.simple()
+print("Initializing MemOS with selected backend...")
+config = create_mos_config()
+mos = MOS(config)
 print("MemOS initialized.")
 
 # Create an MCP server instance

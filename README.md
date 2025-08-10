@@ -154,11 +154,30 @@ MemOS includes an MCP (Model Context Protocol) server that exposes memory functi
 
 1.  **Set Up Environment Variables**:
 
-    Create a `.env` file in the root of the project and add your OpenAI API key:
+    Create a `.env` file in the root of the project. You can configure the server to use OpenAI, Ollama, or OpenRouter.
 
+    **For OpenAI (Default):**
     ```bash
     # .env
+    LLM_BACKEND="openai"
     OPENAI_API_KEY="your-openai-api-key"
+    ```
+
+    **For Ollama:**
+    Make sure you have Ollama running. You can specify the model you want to use.
+    ```bash
+    # .env
+    LLM_BACKEND="ollama"
+    OLLAMA_MODEL="llama3" # Or any other model you have pulled in Ollama
+    ```
+
+    **For OpenRouter:**
+    Use your OpenRouter API key and specify the model you want to use.
+    ```bash
+    # .env
+    LLM_BACKEND="openrouter"
+    OPENROUTER_API_KEY="your-openrouter-api-key"
+    OPENROUTER_MODEL="google/gemini-flash-1.5" # Example model
     ```
 
 2.  **Install Dependencies**:
