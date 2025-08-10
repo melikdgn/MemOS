@@ -139,6 +139,58 @@ print(f"text_memories: {retrieved_memories['text_mem']}")
 
 For more detailed examples, please check out the [`examples`](./examples) directory.
 
+## 🔌 MCP Sunucusu (MCP Server)
+
+MemOS includes an MCP (Model Context Protocol) server that exposes memory functions to compatible clients like Claude Desktop, Cursor, and other development tools. This allows you to interact with MemOS memories directly from your favorite editor or IDE.
+
+### Features
+
+- **List Memories**: View all memory entries.
+- **Add Memory**: Create new memories.
+- **Delete Memory**: Remove a specific memory by its ID.
+- **Search Memory**: Perform a semantic search across your memories.
+
+### How to Run the MCP Server
+
+1.  **Set Up Environment Variables**:
+
+    Create a `.env` file in the root of the project and add your OpenAI API key:
+
+    ```bash
+    # .env
+    OPENAI_API_KEY="your-openai-api-key"
+    ```
+
+2.  **Install Dependencies**:
+
+    Install the required Python packages using `pip` and the provided `requirements.txt` file.
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3.  **Start the Server**:
+
+    Run the `mcp_server.py` script to start the server. By default, it will be accessible at `http://127.0.0.1:8765`.
+
+    ```bash
+    python mcp_server.py
+    ```
+
+    You should see an output similar to this, confirming that the server is running:
+
+    ```
+    Initializing MemOS...
+    MemOS initialized.
+    Starting MCP server on http://127.0.0.1:8765
+    Available tools: list_memories, add_memory, delete_memory, search_memory
+    INFO:     Uvicorn running on http://127.0.0.1:8765 (Press CTRL+C to quit)
+    ```
+
+4.  **Connect from a Client**:
+
+    You can now connect to this server from any MCP-compatible client by providing the server's URL (`http://127.0.0.1:8765`).
+
 ## 📦 Installation
 
 ### Install via pip
